@@ -151,8 +151,8 @@ if __name__ == "__main__":
     
     # Create new figure
     fig = plt.figure()
-    ax = fig.add_subplot(1,1,1, ylabel="Thermal demands (MW)", 
-                                xlabel="Time (hours) - full year")   
+    ax = fig.add_subplot(1,1,1, ylabel="Thermal demand (MW)", 
+                                xlabel="Time (hours)")   
     
     # Plot demand profiles
     ax.plot(sum_heat_demand, color=("#c00000"), label="Heat demand (buildings 1 and 2)")
@@ -172,9 +172,11 @@ if __name__ == "__main__":
     ax.set_ylim(bottom=0, top=ax.get_ylim()[1]*1.1)
     ax.set_xlim(left=0, right=8760)
     
-    # Set legend
+    # Set legend and DOC label
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.3), ncol=2)  
+    ax.text(200, 0.2, "District DOC = " + str(round(DOC_district,3)))
     
-    # Show plot
-    plt.show()
+    # Save figure
+    fig.savefig(fname="DOC_visualization.png", dpi=200, 
+                format="png", bbox_inches="tight", pad_inches=0.1)
     
