@@ -16,12 +16,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-#%%
 def calc_DOC(heat_dem, cool_dem):
-    """
-    Returns DOC of heating and cooling time series, for:
+    """Function to calculate DOC for time series.
+
+    This function calculates the DOC for heating and cooling time series. It returns the
+    DOC according to Eq. (). The calculated DOC can be used to determine:
+
       - District DOC                   in Eq. (6)
       - BES DOC for single building    in Eq. (10)
+
+    Input parameters heat_dem and cool_dem need to have the same dimensions.
+
+    Parameters
+    ----------
+    heat_dem : array_like
+        Numpy array with heating demand time series in same resolution as cool_dem.
+    cool_dem : array_like
+        Numpy array with cooling demand time series in same resolution as cool_dem.
+
+    Returns
+    -------
+    float
+        DOC for given time series.
     """
 
     t_steps = range(len(heat_dem))  # Number of time steps
@@ -32,10 +48,25 @@ def calc_DOC(heat_dem, cool_dem):
     return counter / denominator
 
 
-#%%
 def calc_mean_BES_DOC(heat_dem_list, cool_dem_list):
-    """
-    Returns mean BES DOC as defined in Eq. (11).
+    """Function to calculate DOC for an arbitrary number of buildings.
+
+    This function calculates the mean DOC for a number of buildingsas defined in Eq.
+    (11). Input parameters heat_dem_list and cool_dem_list need to have the same
+    dimensions. In addition, the containing time series need to have the same
+    dimensions.
+
+    Parameters
+    ----------
+    heat_dem_list : list
+        List with array_like demand time series for heating.
+    cool_dem_list : list
+        List with array_like demand time series for cooling.
+
+    Returns
+    -------
+    float
+        mean DOC for given time series as defined in Eq. (11).
     """
 
     t_steps = range(len(heat_dem_list[0]))  # Number of time steps
@@ -55,10 +86,25 @@ def calc_mean_BES_DOC(heat_dem_list, cool_dem_list):
     return counter / denominator
 
 
-#%%
 def calc_Network_DOC(heat_dem_list, cool_dem_list):
-    """
-    Returns Network DOC as defined in Eq. (15).
+    """Function to calculate DOC for thermal network.
+
+    This function calculates the network DOC for a number of connected buildings as
+    defined in Eq. (15). Input parameters heat_dem_list and cool_dem_list need to have
+    the same dimensions. In addition, the containing time series need to have the same
+    dimensions.
+
+    Parameters
+    ----------
+    heat_dem_list : list
+        List with array_like demand time series for heating.
+    cool_dem_list : list
+        List with array_like demand time series for cooling.
+
+    Returns
+    -------
+    float
+        Network DOC for given time series as defined in Eq. (15).
     """
 
     t_steps = range(len(heat_dem_list[0]))  # Number of time steps
@@ -86,7 +132,7 @@ def calc_Network_DOC(heat_dem_list, cool_dem_list):
 
 if __name__ == "__main__":
 
-    #%% CREATE EXEMPLARY DEMAND TIME SERIES
+    # CREATE EXEMPLARY DEMAND TIME SERIES
 
     # Time steps
     time = np.linspace(0, 8759, 8760)
@@ -99,7 +145,7 @@ if __name__ == "__main__":
     heat_demand_bldg_2 = 1 * np.ones(8760)
     cold_demand_bldg_2 = 2 * np.ones(8760)
 
-    #%% DISTRICT DOC
+    # DISTRICT DOC
 
     # For calculating the District DOC, sum time series of all buildings
     sum_heat_demand = heat_demand_bldg_1 + heat_demand_bldg_2
@@ -109,7 +155,7 @@ if __name__ == "__main__":
     DOC_district = calc_DOC(sum_heat_demand, sum_cool_demand)  # Eq. (6)
     print("District DOC is " + str(round(DOC_district, 3)) + ".")
 
-    #%% BUILDING ENERGY SYSTEM DOC (DOC for individual buildings)
+    # BUILDING ENERGY SYSTEM DOC (DOC for individual buildings)
 
     # Assume COPs for heat pumps and chillers
     COP_HP = 4
@@ -136,7 +182,7 @@ if __name__ == "__main__":
     mean_BES_DOC = calc_mean_BES_DOC(heat_dem_list, cool_dem_list)  # Eq. (11)
     print("Mean BES DOC is " + str(round(mean_BES_DOC, 3)) + ".")
 
-    #%% NETWORK DOC (indicates balancing potential between buildings)
+    # NETWORK DOC (indicates balancing potential between buildings)
 
     # Calculate net heat/cold demand
     # Building 1
@@ -157,7 +203,7 @@ if __name__ == "__main__":
     Network_DOC = calc_Network_DOC(heat_dem_list, cool_dem_list)  # Eq. (15)
     print("Network DOC is " + str(round(Network_DOC, 3)) + ".")
 
-    #%% VISUALIZE OVERLAP OF DEMANDS
+    # VISUALIZE OVERLAP OF DEMANDS
 
     # Create new figure
     fig = plt.figure()
