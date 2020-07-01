@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
+"""Examplary calculation of Demand Overlap Coefficients.
 
-"""
-
-Demand Overlap Coefficient (DOC) as presented in
+This module demonstrates the calculation of different (single, building energy systems
+and network) Demand Overlap Coefficient (DOC) as presented in:
 
 M. Wirtz, L. Kivilip, P. Remmen, D. Müller:
 Quantifying Demand Balancing in Bidirectional Low Temperature Networks,
 Energy and Buildings, 224, 110245, 2020.
 
 DOI: 10.1016/j.enbuild.2020.110245
+
+Example
+-------
+
+For an examplary use of different DOCs please look at __main__ of this module, where all
+three DOCs are calculated for synthetic time series for one year in hourly resolution. 
 
 """
 
