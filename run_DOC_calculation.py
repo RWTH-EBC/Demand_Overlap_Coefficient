@@ -14,7 +14,7 @@ Example
 -------
 
 For an examplary use of different DOCs please look at __main__ of this module, where all
-three DOCs are calculated for synthetic time series for one year in hourly resolution. 
+three DOCs are calculated for synthetic time series for one year in hourly resolution.
 
 """
 
