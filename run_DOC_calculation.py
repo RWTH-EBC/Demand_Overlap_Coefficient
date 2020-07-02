@@ -76,7 +76,7 @@ def calc_mean_BES_DOC(heat_dem_list, cool_dem_list):
     """
 
     t_steps = range(len(heat_dem_list[0]))  # Number of time steps
-    bldgs = range(len(heat_dem_list))  # Number of buildings
+    bldgs = range(len(heat_dem_list))       # Number of buildings
 
     counter = 2 * sum(
         sum(np.min([heat_dem_list[b][t], cool_dem_list[b][t]], 0) for b in bldgs)
@@ -114,26 +114,17 @@ def calc_Network_DOC(heat_dem_list, cool_dem_list):
     """
 
     t_steps = range(len(heat_dem_list[0]))  # Number of time steps
-    bldgs = range(len(heat_dem_list))  # Number of buildings
+    bldgs = range(len(heat_dem_list))       # Number of buildings
 
-    counter = 2 * sum(
-        np.min(
-            [
-                sum(heat_dem_list[b][t] for b in bldgs),
-                sum(cool_dem_list[b][t] for b in bldgs),
-            ],
-            0,
-        )
-        for t in t_steps
-    )
+    counter = 2 * sum(np.min([sum(heat_dem_list[b][t] for b in bldgs),
+                              sum(cool_dem_list[b][t] for b in bldgs)], 0) 
+                  for t in t_steps)
 
-    denominator = sum(
-        sum(heat_dem_list[b][t] for b in bldgs)
-        + sum(cool_dem_list[b][t] for b in bldgs)
-        for t in t_steps
-    )
+    denominator = sum(sum(heat_dem_list[b][t] for b in bldgs)
+                    + sum(cool_dem_list[b][t] for b in bldgs) for t in t_steps)
 
     return counter / denominator
+
 
 
 if __name__ == "__main__":
@@ -151,6 +142,7 @@ if __name__ == "__main__":
     heat_demand_bldg_2 = 1 * np.ones(8760)
     cold_demand_bldg_2 = 2 * np.ones(8760)
 
+
     # DISTRICT DOC
 
     # For calculating the District DOC, sum time series of all buildings
@@ -158,8 +150,9 @@ if __name__ == "__main__":
     sum_cool_demand = cold_demand_bldg_1 + cold_demand_bldg_2
 
     # Calculate DOC
-    DOC_district = calc_DOC(sum_heat_demand, sum_cool_demand)  # Eq. (6)
+    DOC_district = calc_DOC(sum_heat_demand, sum_cool_demand)       # Eq. (6)
     print("District DOC is " + str(round(DOC_district, 3)) + ".")
+
 
     # BUILDING ENERGY SYSTEM DOC (DOC for individual buildings)
 
@@ -168,15 +161,15 @@ if __name__ == "__main__":
     COP_CC = 5
 
     # Building 1
-    heat_demand_BES_1 = heat_demand_bldg_1 * (1 - 1 / COP_HP)  # Eq. (7)
-    cold_demand_BES_1 = cold_demand_bldg_1 * (1 + 1 / COP_CC)  # Eq. (8)
-    DOC_BES_1 = calc_DOC(heat_demand_BES_1, cold_demand_BES_1)  # Eq. (10)
+    heat_demand_BES_1 = heat_demand_bldg_1 * (1 - 1 / COP_HP)       # Eq. (7)
+    cold_demand_BES_1 = cold_demand_bldg_1 * (1 + 1 / COP_CC)       # Eq. (8)
+    DOC_BES_1 = calc_DOC(heat_demand_BES_1, cold_demand_BES_1)      # Eq. (10)
     print("DOC BES of building 1 is " + str(round(DOC_BES_1, 3)) + ".")
 
     # Building 2
-    heat_demand_BES_2 = heat_demand_bldg_2 * (1 - 1 / COP_HP)  # Eq. (7)
-    cold_demand_BES_2 = cold_demand_bldg_2 * (1 + 1 / COP_CC)  # Eq. (8)
-    DOC_BES_2 = calc_DOC(heat_demand_BES_2, cold_demand_BES_2)  # Eq. (10)
+    heat_demand_BES_2 = heat_demand_bldg_2 * (1 - 1 / COP_HP)       # Eq. (7)
+    cold_demand_BES_2 = cold_demand_bldg_2 * (1 + 1 / COP_CC)       # Eq. (8)
+    DOC_BES_2 = calc_DOC(heat_demand_BES_2, cold_demand_BES_2)      # Eq. (10)
     print("DOC BES of building 2 is " + str(round(DOC_BES_2, 3)) + ".")
 
     # Mean BES DOC
@@ -188,26 +181,28 @@ if __name__ == "__main__":
     mean_BES_DOC = calc_mean_BES_DOC(heat_dem_list, cool_dem_list)  # Eq. (11)
     print("Mean BES DOC is " + str(round(mean_BES_DOC, 3)) + ".")
 
+
     # NETWORK DOC (indicates balancing potential between buildings)
 
     # Calculate net heat/cold demand
     # Building 1
-    bal_1 = np.min([heat_demand_BES_1, cold_demand_BES_1], 0)  # Eq. (9)
-    heat_net_demand_1 = heat_demand_BES_1 - bal_1  # Eq. (13)
-    cold_net_demand_1 = cold_demand_BES_1 - bal_1  # Eq. (14)
+    bal_1 = np.min([heat_demand_BES_1, cold_demand_BES_1], 0)       # Eq. (9)
+    heat_net_demand_1 = heat_demand_BES_1 - bal_1                   # Eq. (13)
+    cold_net_demand_1 = cold_demand_BES_1 - bal_1                   # Eq. (14)
 
     # Building 2
-    bal_2 = np.min([heat_demand_BES_2, cold_demand_BES_2], 0)  # Eq. (9)
-    heat_net_demand_2 = heat_demand_BES_2 - bal_2  # Eq. (13)
-    cold_net_demand_2 = cold_demand_BES_2 - bal_2  # Eq. (14)
+    bal_2 = np.min([heat_demand_BES_2, cold_demand_BES_2], 0)       # Eq. (9)
+    heat_net_demand_2 = heat_demand_BES_2 - bal_2                   # Eq. (13)
+    cold_net_demand_2 = cold_demand_BES_2 - bal_2                   # Eq. (14)
 
     # Collect time series of all buildings in list
     heat_dem_list = [heat_net_demand_1, heat_net_demand_2]
     cool_dem_list = [cold_net_demand_1, cold_net_demand_2]
 
     # Calculate Network DOC
-    Network_DOC = calc_Network_DOC(heat_dem_list, cool_dem_list)  # Eq. (15)
+    Network_DOC = calc_Network_DOC(heat_dem_list, cool_dem_list)    # Eq. (15)
     print("Network DOC is " + str(round(Network_DOC, 3)) + ".")
+
 
     # VISUALIZE OVERLAP OF DEMANDS
 
@@ -227,9 +222,7 @@ if __name__ == "__main__":
     balanced_demands = np.min(np.array([sum_heat_demand, sum_cool_demand]), 0)
 
     # Color overlapping area
-    ax.fill_between(
-        time, 0, balanced_demands, color=("#e1d1e2"), label="Overlap of demands"
-    )
+    ax.fill_between(time, 0, balanced_demands, color=("#e1d1e2"), label="Overlap of demands")
 
     # Set axis
     ax.set_ylim(bottom=0, top=ax.get_ylim()[1] * 1.1)
