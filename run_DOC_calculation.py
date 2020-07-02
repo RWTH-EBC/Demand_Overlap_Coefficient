@@ -26,7 +26,7 @@ def calc_DOC(heat_dem, cool_dem):
     """Function to calculate DOC for time series.
 
     This function calculates the DOC for heating and cooling time series. It returns the
-    DOC according to Eq. (). The calculated DOC can be used to determine:
+    DOC according to Eq. (2). The calculated DOC can be used to determine:
 
       - District DOC                   in Eq. (6)
       - BES DOC for single building    in Eq. (10)
